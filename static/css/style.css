@@ -70,6 +70,17 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: none;
     font-size: 1.1rem;
+    overflow-x: hidden;
+}
+
+main {
+    width: 100%;
+}
+
+img,
+svg,
+video {
+    max-width: 100%;
 }
 
 .animated-background {
@@ -165,6 +176,7 @@ a, button, .vote-button, select, input {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
 }
 .navbar-brand {
     font-size: 1.5rem;
@@ -172,11 +184,14 @@ a, button, .vote-button, select, input {
     color: var(--color-text-primary);
     text-decoration: none;
     font-family: var(--font-button);
+    flex-shrink: 0;
 }
 .nav-links {
     display: flex;
     align-items: center;
     gap: 1rem; 
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 /* "Sign In" Button */
@@ -422,13 +437,13 @@ input:checked + .slider-knob .theme-icon-light {
 .hero-title-container {
     overflow: hidden;
     margin-bottom: 1.5rem;
-    width: max-content;
+    width: min(100%, max-content);
     margin-left: auto;
     margin-right: auto;
 }
 
 .hero-title-container h1 {
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
     max-width: 700px;
     margin-left: auto;
@@ -453,7 +468,7 @@ input:checked + .slider-knob .theme-icon-light {
     }
 }
 .hero .subtitle {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 2.4vw, 1.25rem);
     color: var(--color-text-secondary);
     margin-bottom: 2.5rem;
     max-width: 600px;
@@ -464,6 +479,7 @@ input:checked + .slider-knob .theme-icon-light {
 
 .search-form-container {
     max-width: 600px;
+    width: 100%;
     margin: 0 auto;
     position: relative;
     z-index: 10;
@@ -477,6 +493,7 @@ input:checked + .slider-knob .theme-icon-light {
 /* ** REMOVED: .is-sticky and .is-fading rules, as they are disabled in JS ** */
 .search-form {
     display: flex;
+    width: 100%;
     border: 1px solid var(--color-border);
     border-radius: 8px;
     background-color: var(--color-surface);
@@ -502,7 +519,7 @@ input:checked + .slider-knob .theme-icon-light {
     border: none;
     background: none;
     padding: 0.9rem 1.25rem 0.9rem 3.5rem;
-    font-size: 1.3rem; 
+    font-size: clamp(1rem, 2.2vw, 1.3rem);
     color: var(--color-text-primary);
     font-family: var(--font-button);
     border-radius: 8px 0 0 8px;
@@ -540,6 +557,8 @@ input:checked + .slider-knob .theme-icon-light {
     padding-top: 0.5rem;
     display: none;
     overflow: hidden;
+    max-height: min(60vh, 380px);
+    overflow-y: auto;
 }
 .suggestion-item {
     display: flex;
@@ -630,6 +649,7 @@ input:checked + .slider-knob .theme-icon-light {
     display: flex;
     gap: 3rem;
     position: relative;
+    align-items: flex-start;
 }
 .text-content {
     flex: 1;
@@ -652,12 +672,13 @@ input:checked + .slider-knob .theme-icon-light {
     color: var(--color-text-secondary);
     line-height: 1.7;
     max-width: 500px;
+    overflow-wrap: anywhere;
 }
 .image-panel {
     flex: 1;
     position: sticky;
     top: 110px; 
-    height: 500px; 
+    height: min(500px, 75vh);
     z-index: 1;
 }
 .image-card {
@@ -694,10 +715,12 @@ input:checked + .slider-knob .theme-icon-light {
 .main-column {
     flex: 2;
     min-width: 300px;
+    min-width: 0;
 }
 .sidebar-column {
     flex: 1;
     min-width: 280px;
+    min-width: 0;
 }
 .main-column h2 {
     margin-bottom: 1.5rem;
@@ -713,6 +736,7 @@ input:checked + .slider-knob .theme-icon-light {
 .tool-card {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background-color: var(--color-surface);
     padding: 1.5rem;
     
@@ -781,10 +805,10 @@ input:checked + .slider-knob .theme-icon-light {
     color: var(--color-text-secondary);
     font-size: 0.95rem;
     margin-bottom: 0.5rem;
-    /* Truncate long descriptions */
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 .tool-category {
     font-size: 0.8rem;
@@ -1158,7 +1182,7 @@ a.submit-button-link:hover {
     border: 1px solid var(--color-border);
 }
 .detail-title h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.6rem, 4.5vw, 2.5rem);
     color: var(--color-text-primary);
     margin: 0;
 }
@@ -1311,6 +1335,7 @@ a.submit-button-link:hover {
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
 }
 .profile-avatar-small {
     width: 32px;
@@ -1504,6 +1529,294 @@ a.submit-button-link:hover {
 .button-89:active {
   background: var(--color-primary);
   color: var(--color-text-inverse);
+}
+
+/* --- Responsive Layout --- */
+@media (max-width: 992px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    .navbar .container {
+        flex-wrap: wrap;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        row-gap: 0.75rem;
+    }
+
+    .button-89,
+    .button-85,
+    .button-55,
+    .nav-button-login,
+    .button-86 {
+        font-size: 1rem;
+    }
+
+    .hero {
+        min-height: auto;
+        padding: 4rem 0 4.5rem;
+    }
+
+    .scroll-down-arrow {
+        bottom: 30px;
+    }
+
+    .sticky-container {
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .text-content,
+    .image-panel {
+        width: 100%;
+    }
+
+    .text-block {
+        min-height: auto;
+        padding: 1rem 0;
+    }
+
+    .image-panel {
+        position: relative;
+        top: 0;
+        height: min(360px, 55vh);
+        order: -1;
+    }
+
+    .page-content {
+        gap: 1.5rem;
+    }
+
+    .main-column,
+    .sidebar-column {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .content-container,
+    .form-container {
+        padding: 1.75rem;
+    }
+
+    .detail-header,
+    .detail-header-main,
+    .detail-actions {
+        width: 100%;
+    }
+
+    .detail-header-main {
+        align-items: flex-start;
+    }
+
+    .detail-actions {
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 1rem;
+    }
+
+    .navbar {
+        padding: 0.85rem 0;
+    }
+
+    .navbar-brand {
+        width: 100%;
+        text-align: center;
+        font-size: 1.3rem;
+    }
+
+    .nav-links {
+        gap: 0.65rem;
+    }
+
+    .button-89,
+    .button-85,
+    .button-55,
+    .nav-button-login,
+    .button-86 {
+        padding: 0.55rem 0.8rem;
+        line-height: 1.1;
+    }
+
+    .hero-title-container h1 {
+        line-height: 1.15;
+    }
+
+    .hero .subtitle {
+        margin-bottom: 1.5rem;
+    }
+
+    .search-form {
+        flex-wrap: wrap;
+    }
+
+    .search-form .search-icon {
+        left: 0.9rem;
+        width: 18px;
+    }
+
+    #search-input {
+        padding: 0.8rem 1rem 0.8rem 2.75rem;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .search-submit-btn {
+        width: 100%;
+        min-height: 44px;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .tool-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1.1rem;
+    }
+
+    .card-main-link {
+        align-items: flex-start;
+    }
+
+    .tool-icon {
+        width: 44px;
+        height: 44px;
+        margin-right: 0.9rem;
+    }
+
+    .tool-info h3 {
+        font-size: 1.1rem;
+    }
+
+    .tool-info p {
+        -webkit-line-clamp: 3;
+    }
+
+    .tool-vote {
+        margin-left: 0;
+        align-self: flex-end;
+    }
+
+    .content-container,
+    .form-container,
+    .detail-header,
+    .team-section,
+    .review-form,
+    .review-card {
+        padding: 1.2rem;
+    }
+
+    .contestant {
+        width: 100%;
+        max-width: 360px;
+        padding: 1.25rem;
+    }
+
+    .vs-text {
+        width: 100%;
+    }
+
+    .flash-messages-container {
+        top: 4.4rem;
+    }
+}
+
+@media (max-width: 540px) {
+    .container {
+        padding: 0 12px;
+    }
+
+    .nav-links {
+        justify-content: flex-start;
+    }
+
+    .button-89,
+    .button-85,
+    .button-55,
+    .nav-button-login,
+    .button-86 {
+        font-size: 0.95rem;
+    }
+
+    .hero {
+        padding-top: 3.25rem;
+    }
+
+    .scroll-down-arrow {
+        display: none;
+    }
+
+    .text-block h2 {
+        font-size: 1.8rem;
+    }
+
+    .text-block p {
+        font-size: 1rem;
+    }
+
+    .detail-header-main {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .detail-logo {
+        width: 64px;
+        height: 64px;
+    }
+
+    .detail-actions .submit-button,
+    .detail-actions .vote-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (hover: none), (pointer: coarse) {
+    body,
+    a,
+    button,
+    .vote-button,
+    select,
+    input {
+        cursor: auto;
+    }
+
+    .cursor-dot,
+    .cursor-outline {
+        display: none !important;
+    }
+
+    .tool-card:hover,
+    .button-55:hover,
+    .button-85:hover,
+    .nav-button-login:hover {
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+    }
+
+    .reveal-on-scroll {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 /* === ** NEW: Keyframe animation for bouncing arrow ** === */
