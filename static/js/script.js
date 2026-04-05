@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const supportsFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const isDesktopLikeViewport = window.matchMedia('(min-width: 993px)').matches;
+
     const updateNavbarColor = (theme) => {
         const rootStyle = getComputedStyle(document.documentElement);
         let surfaceRgb;
@@ -297,6 +301,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const imageCards = document.querySelectorAll('.image-card');
 
     if (textBlocks.length > 0 && imageCards.length > 0) {
+        if (!isDesktopLikeViewport || prefersReducedMotion) {
+            imageCards.forEach((card, index) => {
+                card.classList.toggle('active', index === 0);
+            });
+        } else {
         const observerOptions = {
             root: null, // relative to viewport
             rootMargin: '0px',
@@ -326,6 +335,7 @@ document.addEventListener("DOMContentLoaded", function() {
         textBlocks.forEach(block => {
             observer.observe(block);
         });
+        }
     }
 
 
@@ -333,14 +343,18 @@ document.addEventListener("DOMContentLoaded", function() {
      * SCROLL INTERACTION: Fade-in elements
      */
     const revealElements = document.querySelectorAll('.reveal-on-scroll');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-            }
-        });
-    }, { threshold: 0.1 });
-    revealElements.forEach(el => observer.observe(el));
+    if (prefersReducedMotion) {
+        revealElements.forEach(el => el.classList.add('is-visible'));
+    } else {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => observer.observe(el));
+    }
 
 
     /**
@@ -350,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const cursorOutline = document.getElementById('cursor-outline');
     const body = document.body;
 
-    if (cursorDot && cursorOutline) {
+    if (cursorDot && cursorOutline && supportsFinePointer) {
         window.addEventListener('mousemove', function (e) {
             cursorDot.style.left = `${e.clientX}px`;
             cursorDot.style.top = `${e.clientY}px`;
@@ -375,6 +389,10 @@ document.addEventListener("DOMContentLoaded", function() {
             cursorDot.style.opacity = '1';
             cursorOutline.style.opacity = '1';
         });
+    } else {
+        if (cursorDot) cursorDot.style.display = 'none';
+        if (cursorOutline) cursorOutline.style.display = 'none';
+        body.style.cursor = 'auto';
     }
 
     /**
