@@ -40,7 +40,7 @@ TOOLS_FILE = 'tools.json'
 
 @app.route('/')
 def home():
-    """Renders the homepage."""
+    """Renders the homepage"""
     search_query = request.args.get('search', '').lower()
     all_tools = read_json(TOOLS_FILE)
     
